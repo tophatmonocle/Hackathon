@@ -14,6 +14,9 @@
                 // Create a new scene to show our pretty (soon-to-be) sprites
                 scene = new THREE.Scene();
 
+                // TODO: Make sprite here
+
+                // Set up the three.js renderer
                 renderer = new THREE.WebGLRenderer();
                 renderer.setClearColorHex(0x000000, 1);
                 renderer.setSize(width, height);
@@ -21,19 +24,33 @@
                 element.appendChild(renderer.domElement);
             }
 
+            // This function causes the renderer to actually render each frame
             function animate() {
+                // Use this browser supported API to get rendering timings
                 requestAnimationFrame(animate);
                 render();
             }
 
+            // Render our scene
             function render() {
                 renderer.render(scene, camera);
             }
 
+            function handleKey(event) {
+                var character = String.fromCharCode(event.keyCode);
+
+                // Override the following with any keyboard handling you'd like
+                console.log(character);
+            }
+
+            // Called on <body> load
             function start() {
                 var container = document.getElementById("container");
                 init(container, 480, 320);
                 animate();
+
+                // Set up key down listener
+                document.addEventListener("keydown", handleKey, false);
             }
         </script>
 	</head>

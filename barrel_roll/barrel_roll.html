@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>Hackathon - template.html</title>
+		<script type="text/javascript" src="../js/Three.js"></script>
+		<script type="text/javascript" src="../js/RequestAnimationFrame.js"></script>
+
+		<script type="text/javascript">
+            // === GAME PARAMETERS ===================================
+            barrel_speed = 3;
+            jump_factor = 3;
+
+            // =======================================================
+
+            function init(element, width, height) {
+                // Create a three.js camera to view our codez
+                camera = new THREE.Camera(90, width / height, 1, 10000);
+                camera.position.z = 1500;
+
+                scene = new THREE.Scene();
+
+                barrel = new THREE.Sprite({
+                    map: "assets/barrel.png",
+                    useScreenCoordinates: true 
+                });
+
+                top_hat = new THREE.Sprite({
+                    map: "assets/tophat.png",
+                    useScreenCoordinates: true 
+                });
+
+                barrel.position.set(430, 280, 0);
+                barrel.scale.set(0.2, 0.2, 0.2);
+                top_hat.position.set(100, 275, 0);
+                top_hat.scale.set(0.2, 0.2, 0.2);
+
+                scene.addChild(barrel);
+                scene.addChild(top_hat);
+
+                renderer = new THREE.WebGLRenderer();
+                renderer.setClearColorHex(0xFFFFFF, 1);
+                renderer.setSize(width, height);
+                renderer.setViewport(0, 0, 480, 320);
+                element.appendChild(renderer.domElement);
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                render();
+            }
+
+            function render() {
+                do_a_barrel_roll();
+                if (jumping) {
+                    var now = new Date();
+                    var diff = now - jump_time;
+                    if (diff < t_max * 2) {
+                        var new_y = top_hat.position.y - jump_factor * jump_hat(now - jump_time);
+                        top_hat.position.set(top_hat.position.x, new_y, top_hat.position.z);
+                    } else {
+                        top_hat.position.set(top_hat.position.x, 275, 0);
+                        jumping = false;
+                    }
+                }
+                if (check_collision()) {
+                    // TODO: GG
+                    fail_game();
+                }
+                renderer.render(scene, camera);
+            }
+
+            function start() {
+                var container = document.getElementById("container");
+                init(container, 480, 320);
+                animate();
+
+                // Set up key down listener
+                document.addEventListener("keydown", onDocumentKeyDown, false);
+            }
+
+            function do_a_barrel_roll() {
+                if (rolling) {
+                    barrel.rotation = barrel.rotation + 0.04;
+                    barrel.position.set(barrel.position.x - barrel_speed, barrel.position.y, barrel.position.z);
+                    if (barrel.position.x <= 0 && !jumping) {
+                        win_game();
+                    }
+                }
+            }
+
+            var t_max = 1000;
+            function jump_hat(t) {
+                // Calculate the top hat's current height
+                var theta = ((t_max - t) / t_max) * Math.PI;
+                return Math.sin(theta);
+            }
+
+            var jumping = false;
+            var jump_time = 0;
+            function start_hat_jump() {
+                if (!jumping) {
+                    jump_time = new Date();
+                    jumping = true;
+                }
+            }
+
+            var rolling = false;
+            var barrel_start_time = 0;
+            function start_barrel() {
+                if(!rolling) {
+                    barrel_start_time = new Date();
+                    rolling = true;
+                }
+            }
+
+            function check_collision() {
+                if (barrel.position.x - top_hat.position.x < 50 && barrel.position.x > 30) {
+                    if (barrel.position.y - top_hat.position.y < 50) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            function reset_game() {
+                barrel.position.set(430, 280, 0);
+                top_hat.position.set(100, 275, 0);
+                rolling = false;
+                jumping = false;
+            }
+
+            function win_game() {
+                reset_game();
+                var wins = document.getElementById("win_count");
+                wins.innerHTML = Number(wins.innerHTML) + 1;
+            }
+
+            function fail_game() {
+                reset_game();
+                var fails = document.getElementById("fail_count");
+                fails.innerHTML = Number(fails.innerHTML) + 1;
+            }
+
+            function onDocumentKeyDown(event) {
+                switch (event.keyCode) {
+                    case 38: 
+                        start_hat_jump();
+                        break;
+                    case 32:
+                        start_barrel();
+                        break;
+                }
+            }
+        </script>
+	</head>
+
+	<body onload="start()">
+        <div id="container">
+        </div>
+        <p>Press space bar to start, press up to jump</p>
+        <p>Wins: <span id="win_count">0</span></p>
+        <p>Fails: <span id="fail_count">0</span></p>
+    </body>
+</html>

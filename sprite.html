@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>Hackathon - template.html</title>
+		<script type="text/javascript" src="js/Three.js"></script>
+		<script type="text/javascript" src="js/RequestAnimationFrame.js"></script>
+
+		<script type="text/javascript">
+            function init(element, width, height) {
+                // Create a three.js camera to view our codez
+                camera = new THREE.Camera(90, width / height, 1, 10000);
+                camera.position.z = 1500;
+
+                // Create a new scene to show our pretty (soon-to-be) sprites
+                scene = new THREE.Scene();
+
+                // Load ourselves a fabled sprite. We pass it a texture which 
+                // it will use to draw itself. Sprites are magical like that.
+                sprite = new THREE.Sprite({
+                    map: "assets/ufo.png",
+                    useScreenCoordinates: false // Use browser's coordinate space
+                });
+
+                sprite.position.set(0, 0, 0);
+
+                // Attach our whimsical sprites to our stoic scene
+                scene.addChild(sprite);
+
+                renderer = new THREE.WebGLRenderer();
+                renderer.setClearColorHex(0x000000, 1);
+                renderer.setSize(width, height);
+                renderer.setViewport(0, 0, 480, 320);
+                element.appendChild(renderer.domElement);
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                render();
+            }
+
+            function render() {
+                renderer.render(scene, camera);
+            }
+
+            function start() {
+                var container = document.getElementById("container");
+                init(container, 480, 320);
+                animate();
+            }
+        </script>
+	</head>
+
+	<body onload="start()">
+        <div id="container">
+        </div>
+    </body>
+</html>

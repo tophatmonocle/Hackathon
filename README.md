@@ -18,12 +18,12 @@ Mozilla docs on WebGL: https://developer.mozilla.org/en/WebGL
 Repository Contents
 ===================
 
-* README.md is meant to be read
-* js/ is where Three.js and helper libraries live
-* assets/ images you can use in your project
-* sprite.html is sample three.js code showing you how to create a simple sprite object
-* sprite_move.html shows you how to move your sprite around
-* template.html is a blank game template you can use as the foundation of your project
-* barrel_roll/ is a very simple example game you can use to:
+* [README.md](https://github.com/tophatmonocle/Hackathon/blob/master/README.md) would like you to read it
+* [js/](https://github.com/tophatmonocle/Hackathon/blob/master/js) is where Three.js and helper libraries live
+* [assets/](https://github.com/tophatmonocle/Hackathon/blob/master/assets) images you can use in your project
+* [sprite.html](https://github.com/tophatmonocle/Hackathon/blob/master/sprite.html) is sample three.js code showing you how to create a simple sprite object
+* [sprite_move.html](https://github.com/tophatmonocle/Hackathon/blob/master/sprite_move.html) shows you how to move your sprite around
+* [template.html](https://github.com/tophatmonocle/Hackathon/blob/master/template.html) is a blank game template you can use as the foundation of your project
+* [barrel_roll/](https://github.com/tophatmonocle/Hackathon/tree/master/barrel_roll) is a very simple example game you can use to:
     * Get inspiration
     * Amuse yourself

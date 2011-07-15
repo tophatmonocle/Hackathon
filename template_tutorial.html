@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>Hackathon - template.html</title>
+		<script type="text/javascript" src="js/Three.js"></script>
+		<script type="text/javascript" src="js/RequestAnimationFrame.js"></script>
+
+		<script type="text/javascript">
+            function init(element, width, height) {
+                // Create a three.js camera to view our codez
+                camera = new THREE.Camera(90, width / height, 1, 10000);
+                camera.position.z = 1500;
+
+                // Create a new scene to show our pretty (soon-to-be) sprites
+                scene = new THREE.Scene();
+
+                sprite = new THREE.Sprite({
+                    map: "assets/ufo.png", 
+                    useScreenCoordinates: true
+                });
+                sprite.position.set(200, 200, 0);
+
+                scene.addChild(sprite);
+
+                // Create a sphere
+                sphere = new THREE.Mesh(
+                    new THREE.SphereGeometry(500, 16, 16),
+                    new THREE.MeshLambertMaterial({ color: 0xCC0000 })
+                );
+                sphere.position.set(1200, 200, 10);
+                scene.addChild(sphere);
+
+                pointLight = new THREE.PointLight(0xFFFFFF);
+                pointLight.position.set(10, 50, 130);
+
+                scene.addChild(pointLight);
+
+                // Set up the three.js renderer
+                renderer = new THREE.WebGLRenderer();
+                renderer.setClearColorHex(0x000000, 1);
+                renderer.setSize(width, height);
+                renderer.setViewport(0, 0, 480, 320);
+                element.appendChild(renderer.domElement);
+            }
+
+            function animate_sprite() {
+                sprite.position.set(
+                    sprite.position.x - 5,
+                    sprite.position.y,
+                    sprite.position.z
+                );
+            }
+
+            // This function causes the renderer to actually render each frame
+            function animate() {
+                animate_sprite();
+                // Use this browser supported API to get rendering timings
+                requestAnimationFrame(animate);
+                render();
+            }
+
+            // Render our scene
+            function render() {
+                renderer.render(scene, camera);
+            }
+
+            function handleKey(event) {
+                var character = String.fromCharCode(event.keyCode);
+
+                // Override the following with any keyboard handling you'd like
+                console.log(character);
+            }
+
+            // Called on <body> load
+            function start() {
+                var container = document.getElementById("container");
+                init(container, 480, 320);
+                animate();
+
+                // Set up key down listener
+                document.addEventListener("keydown", handleKey, false);
+            }
+        </script>
+	</head>
+
+	<body onload="start()">
+        <div id="container">
+        </div>
+    </body>
+</html>
